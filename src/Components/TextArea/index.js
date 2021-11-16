@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import '../TextArea/textarea.css';
 
 function TextArea(props) {
+  const [currentText] = useState(props.currentText);
+  const [testText] = useState(() => currentText.split(''));
    
     return (
              <div>
@@ -10,7 +12,11 @@ function TextArea(props) {
                      <u> Typing Speed Test</u>
                 </h1>
                  <div className="textArea">
-                   <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span>
+                 {
+                    testText.map((s,i) => {
+                        return <span key={i}>{s}</span>
+                    })
+                    }
                  </div>
             </div>
   );
