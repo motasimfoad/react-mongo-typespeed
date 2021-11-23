@@ -6,6 +6,8 @@ import Score from '../../Components/Score';
 import { useTimer } from 'use-timer';
 import {randomText} from '../../Constant';
 import logo from '../../Assets/Image/logo.jpeg';
+import Sound from '../../Assets/Audio/key.mp3';
+let audio = new Audio(Sound);
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
 
   const onChange = (e) => {
     const a = e.currentTarget.value;
+     audio.play();
+     audio.playbackRate = 1.1;
      start();
      setUserText(a);
      complete(a);
