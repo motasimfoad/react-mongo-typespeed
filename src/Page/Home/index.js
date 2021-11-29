@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Container, Row, Col, Button, Navbar, Nav } from 'react-bootstrap';
+import { Container, Row, Col, Button, Navbar, Nav, Form } from 'react-bootstrap';
 import '../Home/home.css';
 import TextArea from '../../Components/TextArea';
 import Score from '../../Components/Score';
@@ -7,16 +7,20 @@ import { useTimer } from 'use-timer';
 import {randomText} from '../../Constant';
 import logo from '../../Assets/Image/logo.jpeg';
 import Sound from '../../Assets/Audio/key.mp3';
+import ScoreCard from '../../Components/ScoreCard';
+import { PayPalButton } from "react-paypal-button-v2";
+
 let audio = new Audio(Sound);
 
 function App() {
-
+  const [modalShow, setModalShow] = useState(false);
   const { time, start, pause } = useTimer();
   const [currentScore, setCurrentScore] = useState(0);
   const [currentText] = useState(randomText());
   const [userText, setUserText] = useState('');
   const [text, setText] = useState('');
   const [charCount, setCharCount] = useState('');
+  const [donation, setDonation] = useState('');
 
   const onChange = (e) => {
     const a = e.currentTarget.value;
@@ -34,11 +38,13 @@ function App() {
      return (() => e.replace(' ', '').split('').filter((s,i) => s === text[i]).length)
    };
 
- const complete = (e) => {
-   if (currentText.length === e.length) {
-     pause();
-    }
- };
+   const complete = (e) => {
+    if (currentText.length === e.length) {
+      pause();
+      setModalShow(true);
+     }
+  };
+
 
  const scoreEngine = () => {
    if (charCount !== 0 && time !== 0) {
@@ -69,8 +75,8 @@ function App() {
             />{' '}
           React Typespeed
           </Navbar.Brand>
-          <Nav.Link eventKey={2} href="#memes">
-            Donate
+          <Nav.Link eventKey={2} href="#contact">
+            <a href="#">Contact US</a>
           </Nav.Link>
         </Container>
       </Navbar>
@@ -89,14 +95,41 @@ function App() {
           </Col>
           <Col xl={5}>
           <Score currentscore={currentScore}/>
-          
+          <ScoreCard
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            currentscore={currentScore}
+            />
           </Col>
-          <div className="footer">
+         
+       </Row>
+       <Row>
+         <Col sm = {7}>
+         <Form.Control className="input" size="lg" type="text" placeholder="Donation Amount?" onChange={(e) => setDonation(e.target.value)}/>
+         </Col>
+         <Col sm = {5}>
+         <PayPalButton
+                amount = {donation}
+                // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                onSuccess={(details) => {
+                    alert("Transaction completed by " + details.payer.name.given_name);
+
+                    // OPTIONAL: Call your server to save the transaction
+                    return fetch("/paypal-transaction-complete", {
+                        method: "post",
+                        body: JSON.stringify({
+                            orderID: 1
+                        })
+                    });
+                }}
+            />
+         </Col>
+       </Row>
+       <div className="footer">
               <a href="#" target="_blank" rel="noopener noreferrer">
                   (c)Type Speed
               </a>
             </div>
-       </Row>
    </Container>
   );
 }
