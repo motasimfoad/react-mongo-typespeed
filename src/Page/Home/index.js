@@ -76,12 +76,12 @@ function App() {
           React Typespeed
           </Navbar.Brand>
           <Nav.Link eventKey={2} href="#contact">
-            <a href="#">Contact US</a>
+            <a href="mailto:test@gmail.com">Contact US</a>
           </Nav.Link>
         </Container>
       </Navbar>
       
-       <Row style={{height:'100vh'}}>
+       <Row>
            <Col xl={7} >
             < br />
             <TextArea currentText={currentText} userText={userText}/>
@@ -101,13 +101,10 @@ function App() {
             currentscore={currentScore}
             />
           </Col>
-         
-       </Row>
-       <Row>
-         <Col sm = {7}>
+          <Col lg = {7}>
          <Form.Control className="input" size="lg" type="text" placeholder="Donation Amount?" onChange={(e) => setDonation(e.target.value)}/>
          </Col>
-         <Col sm = {5}>
+         <Col lg = {5}>
          <PayPalButton
                 amount = {donation}
                 // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
@@ -124,12 +121,18 @@ function App() {
                 }}
             />
          </Col>
+         
        </Row>
-       <div className="footer">
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                  (c)Type Speed
-              </a>
-            </div>
+       <Row>
+       <Col lg = {12}>
+          <div className="footer">
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                    (c)Type Speed
+                </a>
+          </div>
+         </Col>
+       </Row>
+      
    </Container>
   );
 }

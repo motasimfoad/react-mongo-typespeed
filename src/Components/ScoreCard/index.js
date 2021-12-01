@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../ScoreCard/scorecard.css';
+import {useMutation, gql} from '@apollo/client';
+
+const FINAL_MUTATION = gql`
+  mutation MyMutation($name: String, $score: String) {
+    insert_type_test(objects: {name: $name, score: $score}) {
+      returning {
+        id
+      }
+    }
+  }
+`;
 
 function ScoreCard(props) {
   
   const [userName, setUserName] = useState('');
+  const [first_add] = useMutation(FINAL_MUTATION);
   const score = parseInt(props.currentscore);
+  
+  const resultGenerator = () =>{
+    first_add({
+      variables: {
+        name: `${userName}`,
+        score: `${score}`,
+      }
+    }).then( a => {
+      props.onHide();
+    })
+  };
    
   return (
       <Modal
@@ -27,7 +50,7 @@ function ScoreCard(props) {
         <br />
         <div style={{textAlign: 'right'}}>
         <Button className="btn1" onClick={props.onHide}>Cancel</Button>
-        <Button className="btn2">Submit</Button>
+        <Button className="btn2" onClick={resultGenerator}>Submit</Button>
         </div>
         </Form.Group>
         </Modal.Body>

@@ -4,12 +4,20 @@ import './index.css';
 import App from './Page/Home';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { ApolloClient, ApolloProvider, InMemoryCache, HttpLink } from '@apollo/client';
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri:'https://powerful-hyena-13.hasura.app/v1/graphql',
+  })
+});
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ApolloProvider client={client}>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </ApolloProvider>,
+document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
